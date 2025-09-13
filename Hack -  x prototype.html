@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e-Mandi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-green-600 text-white shadow-md p-4">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-3xl font-bold">ई-Mandi</h1>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
+                <div class="relative w-full sm:w-auto">
+                    <select id="language-select" class="bg-white text-gray-800 rounded-lg p-2 font-medium focus:outline-none w-full">
+                        <!-- Languages will be populated by JavaScript -->
+                    </select></div>
+                <div class="relative w-full sm:w-auto">
+                    <select id="region-select" class="bg-white text-gray-800 rounded-lg p-2 font-medium focus:outline-none w-full">
+                        <!-- Regions will be populated by JavaScript -->
+                    </select></div>
+                <div class="relative w-full sm:w-auto">
+                    <select id="produce-select" class="bg-white text-gray-800 rounded-lg p-2 font-medium focus:outline-none w-full">
+                        <!-- Produce will be populated by JavaScript -->
+                    </select></div>
+                <!-- New Registration Tab at the top -->
+                <button id="tab-registration" class="tab-button px-4 py-2 font-medium text-white rounded-lg transition-all duration-300 hover:bg-green-700 active:bg-green-800">Registration</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <nav class="bg-white shadow-md mt-0">
+        <div class="container mx-auto flex justify-center space-x-2 sm:space-x-4 p-2">
+            <button id="tab-home" class="tab-button px-4 py-2 font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gray-100 active:bg-green-100 active-tab">Home</button>
+            <button id="tab-news" class="tab-button px-4 py-2 font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gray-100 active:bg-green-100">News</button>
+            <button id="tab-bidding" class="tab-button px-4 py-2 font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gray-100 active:bg-green-100">Bidding</button>
+            <button id="tab-prices" class="tab-button px-4 py-2 font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gray-100 active:bg-green-100">Market Prices</button>
+            <button id="tab-help" class="tab-button px-4 py-2 font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gray-100 active:bg-green-100">Help</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 mt-8">
+        
+        <!-- Home Tab Content -->
+        <div id="content-home" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- News Section -->
+            <div class="lg:col-span-2 card p-6">
+                <h2 id="news-heading" class="text-2xl font-semibold mb-4 text-gray-800"></h2>
+                <div id="news-container" class="space-y-4">
+                    <!-- News articles will be injected here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Prices & Bidding Section -->
+            <div class="lg:col-span-1 space-y-8">
+                <!-- Dynamic Prices -->
+                <div class="card p-6">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-800"><span id="prices-heading"></span> <span id="current-season" class="text-sm font-normal text-gray-500"></span></h2>
+                    <div id="prices-container" class="space-y-2">
+                        <!-- Price data will be injected here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Bidding Form -->
+                <div class="card p-6">
+                    <h2 id="bid-heading" class="text-2xl font-semibold mb-4 text-gray-800"></h2>
+                    <form id="bidding-form" class="space-y-4">
+                        <div>
+                            <label id="bid-item-label" for="bid-item" class="block text-sm font-medium text-gray-700"></label>
+                            <select id="bid-item" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="wheat">Wheat</option>
+                                <option value="rice">Rice</option>
+                                <option value="cotton">Cotton</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="bid-amount-label" for="bid-amount" class="block text-sm font-medium text-gray-700"></label>
+                            <input type="number" id="bid-amount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500" placeholder="e.g., 25" required>
+                        </div>
+                        <button id="submit-bid-button" type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"></button>
+                    </form>
+                    <div id="bid-message" class="mt-4 p-3 rounded-lg text-sm text-center hidden"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- News Tab Content (hidden by default) -->
+        <div id="content-news" class="tab-content hidden">
+            <div class="card p-6">
+                <h2 id="news-heading-tab" class="text-2xl font-semibold mb-4 text-gray-800"></h2>
+                <div id="news-container-tab" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <!-- Bidding Tab Content (hidden by default) -->
+        <div id="content-bidding" class="tab-content hidden">
+            <div class="card p-6">
+                <!-- Sub-tab Navigation -->
+                <div class="flex justify-center mb-6 border-b border-gray-200">
+                    <button id="sub-tab-buyers" class="sub-tab-button px-6 py-3 font-medium text-gray-700 rounded-t-lg transition-all duration-300 active-sub-tab">Buyers</button>
+                    <button id="sub-tab-sellers" class="sub-tab-button px-6 py-3 font-medium text-gray-700 rounded-t-lg transition-all duration-300">Sellers</button>
+                </div>
+                
+                <!-- Buyers Sub-tab Content -->
+                <div id="sub-content-buyers" class="sub-tab-content">
+                    <h2 id="bid-heading-tab" class="text-2xl font-semibold mb-4 text-gray-800"></h2>
+                    <form id="bidding-form-tab" class="space-y-4">
+                        <div>
+                            <label id="bid-item-label-tab" for="bid-item-tab" class="block text-sm font-medium text-gray-700"></label>
+                            <select id="bid-item-tab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="wheat">Wheat</option>
+                                <option value="rice">Rice</option>
+                                <option value="cotton">Cotton</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="bid-amount-label-tab" for="bid-amount-tab" class="block text-sm font-medium text-gray-700"></label>
+                            <input type="number" id="bid-amount-tab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500" placeholder="e.g., 25" required>
+                        </div>
+                        <button id="submit-bid-button-tab" type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"></button>
+                    </form>
+                    <div id="bid-message-tab" class="mt-4 p-3 rounded-lg text-sm text-center hidden"></div>
+                </div>
+
+                <!-- Sellers Sub-tab Content -->
+                <div id="sub-content-sellers" class="sub-tab-content hidden">
+                    <h2 id="sell-heading" class="text-2xl font-semibold mb-4 text-gray-800"></h2>
+                    <form id="sell-form" class="space-y-4">
+                        <div>
+                            <label id="sell-item-label" for="sell-item" class="block text-sm font-medium text-gray-700"></label>
+                            <select id="sell-item" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="wheat">Wheat</option>
+                                <option value="rice">Rice</option>
+                                <option value="cotton">Cotton</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="sell-quantity-label" for="sell-quantity" class="block text-sm font-medium text-gray-700"></label>
+                            <input type="number" id="sell-quantity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500" placeholder="e.g., 100" required>
+                        </div>
+                        <div>
+                            <label id="sell-price-label" for="sell-price" class="block text-sm font-medium text-gray-700"></label>
+                            <input type="number" id="sell-price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500" placeholder="e.g., 25" required>
+                        </div>
+                        <button id="submit-sell-button" type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"></button>
+                    </form>
+                    <div id="sell-message" class="mt-4 p-3 rounded-lg text-sm text-center hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Prices Tab Content (hidden by default) -->
+        <div id="content-prices" class="tab-content hidden space-y-8">
+            <div class="card p-6">
+                 <h2 class="text-2xl font-semibold mb-4 text-gray-800"><span id="prices-heading-tab"></span> <span id="current-season-tab" class="text-sm font-normal text-gray-500"></span></h2>
+                <div class="mb-4">
+                    <input type="text" id="crop-search-prices" class="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500" placeholder="Search for a crop...">
+                </div>
+                <div id="prices-container-tab" class="space-y-2"></div>
+            </div>
+        </div>
+        
+        <!-- Help Tab Content (hidden by default) -->
+        <div id="content-help" class="tab-content hidden">
+            <div class="card p-6">
+                <h2 id="help-heading" class="text-2xl font-semibold mb-4 text-gray-800"></h2>
+                <div id="help-container" class="space-y-6">
+                    <!-- Help content will be injected by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Registration Tab Content (hidden by default) -->
+        <div id="content-registration" class="tab-content hidden">
+            <div class="card p-6 max-w-xl mx-auto">
+                <h2 id="registration-heading" class="text-2xl font-semibold mb-6 text-gray-800 text-center"></h2>
+                <form id="registration-form" class="space-y-4">
+                    <div>
+                        <label id="reg-phone-label" for="reg-phone" class="block text-sm font-medium text-gray-700"></label>
+                        <input type="tel" id="reg-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500" required>
+                    </div>
+                    <div>
+                        <label id="reg-aadhar-label" for="reg-aadhar" class="block text-sm font-medium text-gray-700"></label>
+                        <input type="text" id="reg-aadhar" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-green-500 focus:border-green-500" pattern="[0-9]{12}" title="Aadhar number must be 12 digits" required>
+                    </div>
+                    <button id="submit-registration-button" type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300"></button>
+                </form>
+                <div id="registration-message" class="mt-4 p-3 rounded-lg text-sm text-center hidden"></div>
+            </div>
+        </div>
+        
+    </main>
+
+    <script>
+        const allCrops = {
+            crops: ["Wheat", "Rice", "Maize", "Barley", "Jowar", "Bajra", "Chickpea", "Mustard", "Cotton", "Sugarcane", "Jute"],
+            fruits: ["Mango", "Banana", "Grapes", "Apple", "Orange", "Watermelon", "Muskmelon"],
+            vegetables: ["Potato", "Onion", "Tomato", "Carrot", "Spinach", "Cauliflower", "Cabbage", "Brinjal"]
+        };
+        
+        const content = {
+            en: {
+                name: "English",
+                newsHeading: "Market News & Insights",
+                pricesHeading: "Live Market Prices",
+                bidHeading: "Place Your Bid",
+                bidItemLabel: "Product",
+                bidAmountLabel: "Bid Amount (₹ per kg)",
+                submitBidButton: "Submit Bid",
+                produceHeading: "Select Produce",
+                sellHeading: "Sell Your Produce",
+                sellItemLabel: "Product",
+                sellQuantityLabel: "Quantity (kg)",
+                sellPriceLabel: "Price (₹ per kg)",
+                submitSellButton: "Submit Listing",
+                buyers: "Buyers",
+                sellers: "Sellers",
+                helpHeading: "Help & Support",
+                registrationTab: "Registration",
+                registrationHeading: "New User Registration",
+                regPhoneLabel: "Phone Number",
+                regAadharLabel: "Aadhar Number",
+                submitRegistrationButton: "Register",
+                season: { rabi: "Rabi Season", kharif: "Kharif Season", zaid: "Zaid Season" },
+                messages: { success: "Your request has been submitted successfully!", error: "Please enter valid amounts.", regSuccess: "Registration successful! Welcome to e-Mandi.", regError: "Please fill out all fields correctly." },
+                news: [
+                    { title: "Monsoon arrives early in Northern states, good for Rabi crops", source: "AgriToday" },
+                    { title: "Government increases MSP for wheat to ₹2400/quintal", source: "Ministry of Agriculture" },
+                    { title: "New water-saving techniques for rice cultivation", source: "Farming Innovations" }
+                ],
+                help: [
+                    { question: "How can I change the language?", answer: "Use the dropdown menu at the top of the page to select your preferred language. The site will update automatically." },
+                    { question: "How are market prices determined?", answer: "Market prices are live and updated based on data from various mandis. Prices may fluctuate based on supply, demand, and season." },
+                    { question: "Can I sell my produce through this platform?", answer: "Yes, you can use the 'Sellers' tab under the Bidding section to list your produce and set your desired price." },
+                    { question: "Who can I contact for technical support?", answer: "For any technical issues, please contact our support team at support@e-mandi.com or call us at 1800-123-4567." }
+                ]
+            },
+            hi: {
+                name: "हिन्दी",
+                newsHeading: "बाजार समाचार और जानकारी",
+                pricesHeading: "लाइव मंडी भाव",
+                bidHeading: "अपनी बोली लगाएं",
+                bidItemLabel: "उत्पाद",
+                bidAmountLabel: "बोली राशि (₹ प्रति किलो)",
+                submitBidButton: "बोली जमा करें",
+                produceHeading: "उत्पाद चुनें",
+                sellHeading: "अपनी उपज बेचें",
+                sellItemLabel: "उत्पाद",
+                sellQuantityLabel: "मात्रा (किलो में)",
+                sellPriceLabel: "मूल्य (₹ प्रति किलो)",
+                submitSellButton: "लिस्टिंग जमा करें",
+                buyers: "खरीददार",
+                sellers: "विक्रेता",
+                helpHeading: "सहायता और समर्थन",
+                registrationTab: "पंजीकरण",
+                registrationHeading: "नए उपयोगकर्ता का पंजीकरण",
+                regPhoneLabel: "फ़ोन नंबर",
+                regAadharLabel: "आधार नंबर",
+                submitRegistrationButton: "पंजीकरण करें",
+                season: { rabi: "रबी मौसम", kharif: "खरीफ मौसम", zaid: "जायद मौसम" },
+                messages: { success: "आपका अनुरोध सफलतापूर्वक जमा हो गया है!", error: "कृपया मान्य राशि दर्ज करें।", regSuccess: "पंजीकरण सफल! ई-मंडी में आपका स्वागत है।", regError: "कृपया सभी फ़ील्ड सही ढंग से भरें।" },
+                news: [
+                    { title: "उत्तरी राज्यों में समय से पहले पहुंचा मानसून, रबी की फसलों के लिए अच्छा", source: "कृषि आज" },
+                    { title: "सरकार ने गेहूं का एमएसपी बढ़ाकर ₹2400 प्रति क्विंटल किया", source: "कृषि मंत्रालय" },
+                    { title: "धान की खेती के लिए पानी बचाने की नई तकनीकें", source: "खेती में नवाचार" }
+                ],
+                help: [
+                    { question: "मैं भाषा कैसे बदल सकता हूँ?", answer: "अपनी पसंदीदा भाषा चुनने के लिए पृष्ठ के शीर्ष पर दिए गए ड्रॉपडाउन मेनू का उपयोग करें। साइट स्वचालित रूप से अपडेट हो जाएगी।" },
+                    { question: "बाजार कीमतें कैसे निर्धारित होती हैं?", answer: "बाजार कीमतें विभिन्न मंडियों से प्राप्त डेटा के आधार पर लाइव और अद्यतन होती हैं। कीमतें आपूर्ति, मांग और मौसम के आधार पर उतार-चढ़ाव कर सकती हैं।" },
+                    { question: "क्या मैं इस प्लेटफॉर्म के माध्यम से अपनी उपज बेच सकता हूँ?", answer: "हाँ, आप अपनी उपज को सूचीबद्ध करने और अपनी इच्छित कीमत निर्धारित करने के लिए बोली अनुभाग के तहत 'विक्रेता' टैब का उपयोग कर सकते हैं।" },
+                    { question: "तकनीकी सहायता के लिए मैं किससे संपर्क कर सकता हूँ?", answer: "किसी भी तकनीकी समस्या के लिए, कृपया हमारी सहायता टीम से support@e-mandi.com पर संपर्क करें या हमें 1800-123-4567 पर कॉल करें।" }
+                ]
+            },
+            as: {
+                name: "অসমীয়া", newsHeading: "বজাৰৰ খবৰ আৰু অন্তৰ্দৃষ্টি", pricesHeading: "লাইভ বজাৰৰ মূল্য", bidHeading: "আপোনাৰ নিলাম দাখিল কৰক", bidItemLabel: "সামগ্ৰী", bidAmountLabel: "নিলামৰ পৰিমাণ (₹ প্ৰতি কেজি)", submitBidButton: "নিলাম দাখিল কৰক", produceHeading: "উৎপাদন বাছনি কৰক", sellHeading: "আপোনাৰ উৎপাদন বিক্ৰী কৰক", sellItemLabel: "সামগ্ৰী", sellQuantityLabel: "পৰিমাণ (কেজিত)", sellPriceLabel: "মূল্য (₹ প্ৰতি কেজি)", submitSellButton: "তালিকা দাখিল কৰক", buyers: "ক্ৰয়কৰ্তা", sellers: "বিক্ৰেতা", helpHeading: "সহায় আৰু সমৰ্থন", registrationTab: "পঞ্জীয়ন", registrationHeading: "নতুন ব্যৱহাৰকাৰী পঞ্জীয়ন", regPhoneLabel: "ফোন নম্বৰ", regAadharLabel: "আধাৰ নম্বৰ", submitRegistrationButton: "পঞ্জীয়ন কৰক", season: { rabi: "ৰবি ঋতু", kharif: "খাৰিফ ঋতু", zaid: "জাইদ ঋতু" }, messages: { success: "আপোনাৰ অনুৰোধ সফলতাৰে দাখিল কৰা হৈছে!", error: "অনুগ্রহ কৰি এটা বৈধ পৰিমাণ দাখিল কৰক।", regSuccess: "পঞ্জীয়ন সফল! ই-মণ্ডলীলৈ স্বাগতম।", regError: "অনুগ্রহ কৰি সকলো ফিল্ড সঠিকভাৱে পূৰণ কৰক।" }, news: [{ title: "উত্তৰৰ ৰাজ্যসমূহত আগতীয়াকৈ আহিল মৌচুম, ৰবি শস্যৰ বাবে ভাল", source: "কৃষি আজি" }], help: [{ question: "মই ভাষা কেনেকৈ সলনি কৰিব পাৰোঁ?", answer: "আপোনাৰ পচন্দৰ ভাষা বাছি ল'বলৈ পৃষ্ঠৰ ওপৰৰ অংশত থকা ড্ৰপডাউন মেনু ব্যৱহাৰ কৰক। চাইট স্বয়ংক্রিয়ভাৱে আপডেট হ'ব।" }]
+            },
+            bn: {
+                name: "বাংলা", newsHeading: "বাজারের খবর ও অন্তর্দৃষ্টি", pricesHeading: "লাইভ বাজার দর", bidHeading: "আপনার বিড জমা দিন", bidItemLabel: "পণ্য", bidAmountLabel: "বিডের পরিমাণ (₹ প্রতি কেজি)", submitBidButton: "বিড জমা দিন", produceHeading: "পণ্য নির্বাচন করুন", sellHeading: "আপনার পণ্য বিক্রি করুন", sellItemLabel: "পণ্য", sellQuantityLabel: "পরিমাণ (কেজিতে)", sellPriceLabel: "মূল্য (₹ প্রতি কেজি)", submitSellButton: "তালিকা জমা দিন", buyers: "ক্রেতা", sellers: "বিক্রেতা", helpHeading: "সহায়তা ও সমর্থন", registrationTab: "রেজিস্ট্রেশন", registrationHeading: "নতুন ব্যবহারকারী রেজিস্ট্রেশন", regPhoneLabel: "ফোন নম্বর", regAadharLabel: "আধার নম্বর", submitRegistrationButton: "রেজিস্টার করুন", season: { rabi: "রবি ঋতু", kharif: "খরিফ ঋতু", zaid: "জায়দ ঋতু" }, messages: { success: "আপনার অনুরোধ সফলভাবে জমা দেওয়া হয়েছে!", error: "অনুগ্রহ করে একটি বৈধ পরিমাণ লিখুন।", regSuccess: "রেজিস্ট্রেশন সফল! ই-মন্ডিতে আপনাকে স্বাগতম।", regError: "অনুগ্রহ করে সব তথ্য সঠিক ভাবে পূরণ করুন।" }, news: [{ title: "উত্তর রাজ্যে তাড়াতাড়ি পৌঁছল বর্ষা, রবি শস্যের জন্য ভালো", source: "কৃষি আজ" }], help: [{ question: "আমি কিভাবে ভাষা পরিবর্তন করতে পারি?", answer: "আপনার পছন্দের ভাষা নির্বাচন করতে পৃষ্ঠার শীর্ষে ড্রপডাউন মেনু ব্যবহার করুন। সাইট স্বয়ংক্রিয়ভাবে আপডেট হবে।" }]
+            },
+            gu: {
+                name: "ગુજરાતી", newsHeading: "બજારના સમાચાર અને આંતરદૃષ્ટિ", pricesHeading: "લાઇવ બજારના ભાવ", bidHeading: "તમારી બોલી મૂકો", bidItemLabel: "ઉત્પાદન", bidAmountLabel: "બોલીની રકમ (₹ પ્રતિ કિલો)", submitBidButton: "બોલી સબમિટ કરો", produceHeading: "ઉત્પાદન પસંદ કરો", sellHeading: "તમારું ઉત્પાદન વેચો", sellItemLabel: "ઉત્પાદન", sellQuantityLabel: "જથ્થો (કિલોમાં)", sellPriceLabel: "ભાવ (₹ પ્રતિ કિલો)", submitSellButton: "સૂચિ સબમિટ કરો", buyers: "ખરીદનાર", sellers: "વેચનાર", helpHeading: "મદદ અને સહાય", registrationTab: "નોંધણી", registrationHeading: "નવા વપરાશકર્તાની નોંધણી", regPhoneLabel: "ફોન નંબર", regAadharLabel: "આધાર નંબર", submitRegistrationButton: "નોંધણી કરો", season: { rabi: "રબી મોસમ", kharif: "ખરીફ મોસમ", zaid: "જાયદ મોસમ" }, messages: { success: "તમારી વિનંતી સફળતાપૂર્વક સબમિટ થઈ ગઈ છે!", error: "કૃપા કરીને માન્ય રકમ દાખલ કરો.", regSuccess: "નોંધણી સફળ! ઈ-મંડીમાં આપનું સ્વાગત છે.", regError: "કૃપા કરીને બધા ક્ષેત્રો યોગ્ય રીતે ભરો." }, news: [{ title: "ઉત્તરી રાજ્યોમાં વહેલો પહોંચ્યો ચોમાસુ, રવિ પાક માટે સારું", source: "કૃષિ આજે" }], help: [{ question: "હું ભાષા કેવી રીતે બદલી શકું?", answer: "તમારી પસંદગીની ભાષા પસંદ કરવા માટે પૃષ્ઠના ટોચ પર ડ્રોપડાઉન મેનૂનો ઉપયોગ કરો. સાઇટ આપમેળે અપડેટ થશે." }]
+            },
+            kn: {
+                name: "ಕನ್ನಡ", newsHeading: "ಮಾರುಕಟ್ಟೆ ಸುದ್ದಿ ಮತ್ತು ಒಳನೋಟಗಳು", pricesHeading: "ಲೈವ್ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು", bidHeading: "ನಿಮ್ಮ ಬಿಡ್ ಸಲ್ಲಿಸಿ", bidItemLabel: "ಉತ್ಪನ್ನ", bidAmountLabel: "ಬಿಡ್ ಮೊತ್ತ (₹ ಪ್ರತಿ ಕೆಜಿ)", submitBidButton: "ಬಿಡ್ ಸಲ್ಲಿಸಿ", produceHeading: "ಉತ್ಪನ್ನ ಆಯ್ಕೆಮಾಡಿ", sellHeading: "ನಿಮ್ಮ ಉತ್ಪನ್ನ ಮಾರಾಟ ಮಾಡಿ", sellItemLabel: "ಉತ್ಪನ್ನ", sellQuantityLabel: "ಪ್ರಮಾಣ (ಕೆಜಿಯಲ್ಲಿ)", sellPriceLabel: "ಬೆಲೆ (₹ ಪ್ರತಿ ಕೆಜಿ)", submitSellButton: "ಪಟ್ಟಿಯನ್ನು ಸಲ್ಲಿಸಿ", buyers: "ಖರೀದಿದಾರರು", sellers: "ಮಾರಾಟಗಾರರು", helpHeading: "ಸಹಾಯ ಮತ್ತು ಬೆಂಬಲ", registrationTab: "ನೋಂದಣಿ", registrationHeading: "ಹೊಸ ಬಳಕೆದಾರ ನೋಂದಣಿ", regPhoneLabel: "ದೂರವಾಣಿ ಸಂಖ್ಯೆ", regAadharLabel: "ಆಧಾರ್ ಸಂಖ್ಯೆ", submitRegistrationButton: "ನೋಂದಣಿ", season: { rabi: "ರಬಿ ಋತು", kharif: "ಖಾರಿಫ್ ಋತು", zaid: "ಜಾಯಿದ್ ಋತು" }, messages: { success: "ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!", error: "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ.", regSuccess: "ನೋಂದಣಿ ಯಶಸ್ವಿಯಾಗಿದೆ! ಇ-ಮಂಡಿಗೆ ಸ್ವಾಗತ.", regError: "ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಕ್ಷೇತ್ರಗಳನ್ನು ಸರಿಯಾಗಿ ಭರ್ತಿ ಮಾಡಿ." }, news: [{ title: "ಉತ್ತರ ರಾಜ್ಯಗಳಲ್ಲಿ ಮುಂಗಾರು ಮೊದಲೇ ಆಗಮನ, ರಬಿ ಬೆಳೆಗಳಿಗೆ ಉತ್ತಮ", source: "ಕೃಷಿ ಇಂದು" }], help: [{ question: "ನಾನು ಭಾಷೆಯನ್ನು ಹೇಗೆ ಬದಲಾಯಿಸಬಹುದು?", answer: "ನಿಮ್ಮ ಆದ್ಯತೆಯ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಲು ಪುಟದ ಮೇಲ್ಭಾಗದಲ್ಲಿರುವ ಡ್ರಾಪ್‌ಡೌನ್ ಮೆನು ಬಳಸಿ. ಸೈಟ್ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಅಪ್‌ಡೇಟ್ ಆಗುತ್ತದೆ." }]
+            },
+            ml: {
+                name: "മലയാളം", newsHeading: "വിപണി വാർത്തകളും ഉൾക്കാഴ്ചകളും", pricesHeading: "തത്സമയ വിപണി വിലകൾ", bidHeading: "നിങ്ങളുടെ ലേലം സമർപ്പിക്കുക", bidItemLabel: "ഉൽപ്പന്നം", bidAmountLabel: "ലേല തുക (₹ കിലോയ്ക്ക്)", submitBidButton: "ലേലം സമർപ്പിക്കുക", produceHeading: "ഉൽപ്പന്നം തിരഞ്ഞെടുക്കുക", sellHeading: "നിങ്ങളുടെ ഉൽപ്പന്നം വിൽക്കുക", sellItemLabel: "ഉൽപ്പന്നം", sellQuantityLabel: "അളവ് (കിലോയിൽ)", sellPriceLabel: "വില (₹ കിലോയ്ക്ക്)", submitSellButton: "ലിസ്റ്റിംഗ് സമർപ്പിക്കുക", buyers: "വാങ്ങുന്നവർ", sellers: "വിൽക്കുന്നവർ", helpHeading: "സഹായം", registrationTab: "രജിസ്ട്രേഷൻ", registrationHeading: "പുതിയ ഉപയോക്തൃ രജിസ്ട്രേഷൻ", regPhoneLabel: "ഫോൺ നമ്പർ", regAadharLabel: "ആധാർ നമ്പർ", submitRegistrationButton: "രജിസ്റ്റർ ചെയ്യുക", season: { rabi: "റാബി സീസൺ", kharif: "ഖാരിഫ് സീസൺ", zaid: "സയ്യിദ് സീസൺ" }, messages: { success: "നിങ്ങളുടെ അഭ്യർത്ഥന വിജയകരമായി സമർപ്പിച്ചു!", error: "ദയവായി സാധുവായ ഒരു തുക നൽകുക.", regSuccess: "രജിസ്ട്രേഷൻ വിജയം! ഇ-മണ്ടിയിലേക്ക് സ്വാഗതം.", regError: "ദയവായി എല്ലാ കോളങ്ങളും ശരിയായി പൂരിപ്പിക്കുക." }, news: [{ title: "വടക്കൻ സംസ്ഥാനങ്ങളിൽ നേരത്തെ മൺസൂൺ എത്തി, റാബി വിളകൾക്ക് നല്ലത്", source: "കൃഷി ഇന്ന്" }], help: [{ question: "എനിക്ക് എങ്ങനെ ഭാഷ മാറ്റാൻ കഴിയും?", answer: "നിങ്ങളുടെ ഇഷ്ടപ്പെട്ട ഭാഷ തിരഞ്ഞെടുക്കാൻ പേജിന്റെ മുകളിലുള്ള ഡ്രോപ്പ്ഡൗൺ മെനു ഉപയോഗിക്കുക. സൈറ്റ് സ്വയമേവ അപ്‌ഡേറ്റ് ചെയ്യും." }]
+            },
+            mr: {
+                name: "मराठी", newsHeading: "बाजारपेठ बातम्या आणि अंतर्दृष्टी", pricesHeading: "थेट बाजार भाव", bidHeading: "तुमची बोली लावा", bidItemLabel: "उत्पादन", bidAmountLabel: "बोलीची रक्कम (₹ प्रति किलो)", submitBidButton: "बोली सबमिट करा", produceHeading: "उत्पादन निवडा", sellHeading: "तुमचे उत्पादन विका", sellItemLabel: "उत्पादन", sellQuantityLabel: "प्रमाण (किलोमध्ये)", sellPriceLabel: "दर (₹ प्रति किलो)", submitSellButton: "यादी सबमिट करा", buyers: "खरेदीदार", sellers: "विक्रेते", helpHeading: "मदत आणि समर्थन", registrationTab: "नोंदणी", registrationHeading: "नवीन वापरकर्ता नोंदणी", regPhoneLabel: "फोन नंबर", regAadharLabel: "आधार क्रमांक", submitRegistrationButton: "नोंदणी करा", season: { rabi: "रब्बी हंगाम", kharif: "खरीप हंगाम", zaid: "जायद हंगाम" }, messages: { success: "तुमची विनंती यशस्वीरित्या सबमिट झाली आहे!", error: "कृपया वैध रक्कम प्रविष्ट करा。", regSuccess: "नोंदणी यशस्वी! ई-मंडीमध्ये आपले स्वागत आहे。", regError: "कृपया सर्व फील्ड योग्य प्रकारे भरा。" }, news: [{ title: "उत्तरेकडील राज्यांमध्ये लवकर मान्सूनचे आगमन, रब्बी पिकांसाठी चांगले", source: "कृषी आज" }], help: [{ question: "मी भाषा कशी बदलू शकेन?", answer: "तुमची पसंत असलेली भाषा निवडण्यासाठी पृष्ठाच्या शीर्षस्थानी असलेल्या ड्रॉपडाउन मेनूचा वापर करा. साइट आपोआप अद्ययावत होईल।" }]
+            },
+            pa: {
+                name: "ਪੰਜਾਬੀ", newsHeading: "ਮਾਰਕੀਟ ਖ਼ਬਰਾਂ ਅਤੇ ਸੂਝ", pricesHeading: "ਲਾਈਵ ਮਾਰਕੀਟ ਰੇਟ", bidHeading: "ਆਪਣੀ ਬੋਲੀ ਲਗਾਓ", bidItemLabel: "ਉਤਪਾਦ", bidAmountLabel: "ਬੋਲੀ ਦੀ ਰਕਮ (₹ ਪ੍ਰਤੀ ਕਿਲੋ)", submitBidButton: "ਬੋਲੀ ਜਮ੍ਹਾਂ ਕਰੋ", produceHeading: "ਉਤਪਾਦ ਚੁਣੋ", sellHeading: "ਆਪਣਾ ਉਤਪਾਦ ਵੇਚੋ", sellItemLabel: "ਉਤਪਾਦ", sellQuantityLabel: "ਮਾਤਰਾ (ਕਿਲੋ ਵਿੱਚ)", sellPriceLabel: "ਕੀਮਤ (₹ ਪ੍ਰਤੀ ਕਿਲੋ)", submitSellButton: "ਸੂਚੀ ਜਮ੍ਹਾਂ ਕਰੋ", buyers: "ਖਰੀਦਦਾਰ", sellers: "ਵੇਚਣ ਵਾਲੇ", helpHeading: "ਮਦਦ ਅਤੇ ਸਹਾਇਤਾ", registrationTab: "ਰਜਿਸਟਰੇਸ਼ਨ", registrationHeading: "ਨਵੇਂ ਵਰਤੋਂਕਾਰ ਦੀ ਰਜਿਸਟਰੇਸ਼ਨ", regPhoneLabel: "ਫੋਨ ਨੰਬਰ", regAadharLabel: "ਆਧਾਰ ਨੰਬਰ", submitRegistrationButton: "ਰਜਿਸਟਰ ਕਰੋ", season: { rabi: "ਰਬੀ ਦਾ ਮੌਸਮ", kharif: "ਖਰੀਫ ਦਾ ਮੌਸਮ", zaid: "ਜ਼ੈਦ ਦਾ ਮੌਸਮ" }, messages: { success: "ਤੁਹਾਡੀ ਬੇਨਤੀ ਸਫਲਤਾਪੂਰਵਕ ਜਮ੍ਹਾਂ ਹੋ ਗਈ ਹੈ!", error: "ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਵੈਧ ਰਕਮ ਦਾਖਲ ਕਰੋ।", regSuccess: "ਰਜਿਸਟਰੇਸ਼ਨ ਸਫਲ! ਈ-ਮੰਡੀ ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ।", regError: "ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਖੇਤਰ ਸਹੀ ਢੰਗ ਨਾਲ ਭਰੋ।" }, news: [{ title: "ਉੱਤਰੀ ਰਾਜਾਂ ਵਿੱਚ ਮਾਨਸੂਨ ਜਲਦੀ ਪਹੁੰਚਿਆ, ਰਬੀ ਫਸਲਾਂ ਲਈ ਚੰਗਾ", source: "ਖੇਤੀਬਾੜੀ ਅੱਜ" }], help: [{ question: "ਮੈਂ ਭਾਸ਼ਾ ਕਿਵੇਂ ਬਦਲ ਸਕਦਾ ਹਾਂ?", answer: "ਆਪਣੀ ਪਸੰਦੀਦਾ ਭਾਸ਼ਾ ਚੁਣਨ ਲਈ ਪੰਨੇ ਦੇ ਸਿਖਰ 'ਤੇ ਡ੍ਰੌਪਡਾਉਨ ਮੀਨੂੰ ਦੀ ਵਰਤੋਂ ਕਰੋ। ਸਾਈਟ ਆਪਣੇ ਆਪ ਅੱਪਡੇਟ ਹੋ ਜਾਵੇਗੀ।" }]
+            },
+            ta: {
+                name: "தமிழ்", newsHeading: "சந்தை செய்திகள் மற்றும் நுண்ணறிவு", pricesHeading: "நேரடி சந்தை விலைகள்", bidHeading: "உங்கள் ஏலத்தை சமர்ப்பிக்கவும்", bidItemLabel: "பொருள்", bidAmountLabel: "ஏலத் தொகை (₹ கிலோகிராமிற்கு)", submitBidButton: "ஏலத்தை சமர்ப்பி", produceHeading: "பொருளைத் தேர்ந்தெடுக்கவும்", sellHeading: "உங்கள் பொருளை விற்கவும்", sellItemLabel: "பொருள்", sellQuantityLabel: "அளவு (கிலோகிராமில்)", sellPriceLabel: "விலை (₹ கிலோகிராமிற்கு)", submitSellButton: "பட்டியலை சமர்ப்பிக்கவும்", buyers: "வாங்குபவர்", sellers: "விற்பவர்", helpHeading: "உதவி", registrationTab: "பதிவு", registrationHeading: "புதிய பயனர் பதிவு", regPhoneLabel: "தொலைபேசி எண்", regAadharLabel: "ஆதார் எண்", submitRegistrationButton: "பதிவு செய்க", season: { rabi: "ரபி பருவம்", kharif: "கரீஃப் பருவம்", zaid: "சையத் பருவம்" }, messages: { success: "உங்கள் கோரிக்கை வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!", error: "தயவுசெய்து சரியான தொகையை உள்ளிடவும்.", regSuccess: "பதிவு வெற்றிகரமாக முடிந்தது! இ-மண்டிக்கு வருக.", regError: "தயவுசெய்து அனைத்து புலங்களையும் சரியாக நிரப்பவும்." }, news: [{ title: "வட மாநிலங்களில் முன்கூட்டியே மழைக்காலம், ரபி பயிர்களுக்கு நல்லது", source: "வேளாண்மை இன்று" }], help: [{ question: "நான் எப்படி மொழி மாற்றலாம்?", answer: "உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்க பக்கத்தின் மேல் உள்ள கீழ்விரி மெனுவைப் பயன்படுத்தவும். தளம் தானாகவே புதுப்பிக்கப்படும்." }]
+            },
+            te: {
+                name: "తెలుగు", newsHeading: "మార్కెట్ వార్తలు మరియు అంతర్దృష్టి", pricesHeading: "లైవ్ మార్కెట్ ధరలు", bidHeading: "మీ బిడ్‌ను ఉంచండి", bidItemLabel: "ఉత్పత్తి", bidAmountLabel: "బిడ్ మొత్తం (₹ కిలోగ్రాముకు)", submitBidButton: "బిడ్ సమర్పించు", produceHeading: "ఉత్పత్తిని ఎంచుకోండి", sellHeading: "మీ ఉత్పత్తిని అమ్మండి", sellItemLabel: "ఉత్పత్తి", sellQuantityLabel: "మొత్తం (కిలోగ్రాములో)", sellPriceLabel: "ధర (₹ కిలోగ్రాముకు)", submitSellButton: "లిస్టింగ్ సమర్పించు", buyers: "కొనుగోలుదారులు", sellers: "అమ్మకందారులు", helpHeading: "సహాయం", registrationTab: "నమోదు", registrationHeading: "కొత్త వినియోగదారు నమోదు", regPhoneLabel: "ఫోన్ నంబర్", regAadharLabel: "ఆధార్ నంబర్", submitRegistrationButton: "నమోదు చేయండి", season: { rabi: "రబి సీజన్", kharif: "ఖరీఫ్ సీజన్", zaid: "జైద్ సీజన్" }, messages: { success: "మీ అభ్యర్థన విజయవంతంగా సమర్పించబడింది!", error: "దయచేసి చెల్లుబాటు అయ్యే మొత్తాన్ని నమోదు చేయండి。", regSuccess: "నమోదు విజయవంతమైంది! ఇ-మండికి స్వాగతం.", regError: "దయచేసి అన్ని ఫీల్డ్‌లను సరిగ్గా పూరించండి।" }, news: [{ title: "ఉత్తర రాష్ట్రాల్లో ముందస్తుగా రుతుపవనాలు, రబీ పంటలకు మంచిది", source: "వ్యవసాయం నేడు" }], help: [{ question: "నేను భాషను ఎలా మార్చగలను?", answer: "మీకు నచ్చిన భాషను ఎంచుకోవడానికి పేజీ ఎగువన ఉన్న డ్రాప్‌డౌన్ మెనూను ఉపయోగించండి. సైట్ స్వయంచాలకంగా అప్‌డేట్ అవుతుంది।" }]
+            },
+            ur: {
+                name: "اردو", newsHeading: "مارکیٹ کی خبریں اور بصیرت", pricesHeading: "براہ راست مارکیٹ کی قیمتیں", bidHeading: "اپنی بولی لگائیں", bidItemLabel: "پروڈکٹ", bidAmountLabel: "بولی کی رقم (₹ فی کلوگرام)", submitBidButton: "بولی جمع کروائیں", buyers: "خریدار", sellers: "فروخت کنندہ", helpHeading: "مدد اور معاونت", registrationTab: "اندراج", registrationHeading: "نئے صارف کا اندراج", regPhoneLabel: "فون نمبر", regAadharLabel: "آدھار نمبر", submitRegistrationButton: "اندراج کریں", season: { rabi: "ربیع کا موسم", kharif: "خریف کا موسم", zaid: "زید کا موسم" }, messages: { success: "آپ کی درخواست کامیابی کے ساتھ جمع کر دی گئی ہے!", error: "براہ کرم ایک درست رقم درج کریں۔", regSuccess: "اندراج کامیاب! ای-مندی میں خوش آمدید۔", regError: "براہ کرم تمام فیلڈز کو صحیح طرح سے پُر کریں۔" }, news: [{ title: "شمالی ریاستوں میں وقت سے پہلے مون سون کی آمد، ربیع کی فصلوں کے لیے اچھا", source: "ایگری ٹوڈے" }], help: [{ question: "میں زبان کیسے بدل سکتا ہوں؟", answer: "اپنی پسندیدہ زبان منتخب کرنے کے لیے صفحہ کے اوپر ڈراپ ڈاؤن مینو کا استعمال کریں۔ سائٹ خود بخود اپ ڈیٹ ہو جائے گی۔" }]
+            },
+            sa: {
+                name: "संस्कृतम्", newsHeading: "विपणन वार्ताः तथा अन्तर्दृष्टिः", pricesHeading: "लाइव विपणन मूल्यः", bidHeading: "भवतः बोलीं स्थापयतु", bidItemLabel: "उत्पादनम्", bidAmountLabel: "बोलीराशी (₹ प्रति किलो)", submitBidButton: "बोलीं समर्पयतु", produceHeading: "उत्पादनं चिनोतु", sellHeading: "भवतः उत्पादनं विक्रीणातु", sellItemLabel: "उत्पादनम्", sellQuantityLabel: "मात्रा (किलोमध्ये)", sellPriceLabel: "मूल्यं (₹ प्रति किलो)", submitSellButton: "सूचिं समर्पयतु", buyers: "क्रेतारः", sellers: "विक्रेतारः", helpHeading: "सहायता", registrationTab: "पञ्जीकरणम्", registrationHeading: "नूतन-उपयोगकर्तुः पञ्जीकरणम्", regPhoneLabel: "दूरभाष-सङ्ख्या", regAadharLabel: "आधार-सङ्ख्या", submitRegistrationButton: "पञ्जीकरणं कुर्वन्तु", season: { rabi: "रबी-ऋतुः", kharif: "खरीफ-ऋतुः", zaid: "जायद-ऋतुः" }, messages: { success: "भवतः अनुरोधः सफलतापूर्वकः समर्पितः अस्ति!", error: "कृपया वैधं राशिं प्रविष्टं कुर्वन्तु。", regSuccess: "पञ्जीकरणं सफलम्! ई-मण्डी मध्ये स्वागतम्।", regError: "कृपया सर्वाणि क्षेत्राणि सम्यक् पूरयन्तु।" }, news: [{ title: "उत्तरीयेषु राज्येषु मानसूनस्य शीघ्रम् आगमनं, रबी-सस्यानां कृते शुभम्", source: "कृषि-आज" }], help: [{ question: "अहं भाषां कथं परिवर्तयितुं शक्नोमि?", answer: "भवतः इष्टभाषां चयनं कर्तुं पृष्ठस्य उपरिभागे विद्यमानं ड्रॉपडाउन-मेनूम् उपयुज्यतु। जालस्थानम् स्वतः एव अद्यतनं भविष्यति।" }]
+            },
+        };
+
+        const languages = [
+            { code: "en", name: "English" }, { code: "hi", name: "हिन्दी" }, { code: "as", name: "অসমীয়া" }, { code: "bn", name: "বাংলা" }, { code: "gu", name: "ગુજરાતી" }, { code: "kn", name: "ಕನ್ನಡ" }, { code: "ml", name: "മലയാളം" }, { code: "mr", name: "मराठी" }, { code: "pa", name: "ਪੰਜਾਬੀ" }, { code: "ta", name: "தமிழ்" }, { code: "te", name: "తెలుగు" }, { code: "ur", name: "اردو" }, { code: "sa", name: "संस्कृतम्" }
+        ];
+
+        const statesAndUTs = [
+            "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+        ];
+        
+        const produceItems = [
+            "All", "Crops", "Fruits", "Vegetables",
+            ...allCrops.crops, ...allCrops.fruits, ...allCrops.vegetables
+        ];
+        
+        // Price data based on region and season
+        const priceData = {
+            "andhrapradesh": {
+                rabi: { wheat: 24.00, chickpea: 52.00, maize: 22.00, mustard: 60.00, barley: 19.00, jowar: 18.00, bajra: 17.50, cotton: 70.00, sugarcane: 30.00, jute: 65.00, apple: 120.00, orange: 60.00, grapes: 75.00, banana: 45.00, mango: 80.00, watermelon: 15.00, muskmelon: 20.00, potato: 25.00, onion: 30.00, tomato: 20.00, carrot: 40.00, spinach: 15.00, cauliflower: 25.00, cabbage: 20.00, brinjal: 22.00 },
+                kharif: { rice: 28.50, cotton: 75.00, jowar: 20.00, maize: 23.00, sugarcane: 32.00, jute: 68.00, mango: 85.00, banana: 48.00, watermelon: 16.00, muskmelon: 21.00, tomato: 22.00, brinjal: 25.00 },
+                zaid: { watermelon: 15.00, cucumber: 20.00, muskmelon: 22.00, tomato: 25.00, brinjal: 28.00 }
+            },
+            "punjab": {
+                rabi: { wheat: 25.00, barley: 21.00, mustard: 68.00, chickpea: 55.00, jowar: 19.50, bajra: 18.50, cotton: 72.00, sugarcane: 31.00, jute: 66.00, apple: 125.00, orange: 65.00, grapes: 80.00, banana: 50.00, mango: 90.00, watermelon: 16.00, muskmelon: 25.00, potato: 28.00, onion: 35.00, tomato: 22.00, carrot: 45.00, spinach: 18.00, cauliflower: 28.00, cabbage: 22.00, brinjal: 24.00 },
+                kharif: { rice: 30.00, cotton: 78.00, maize: 25.00, sugarcane: 34.00, jute: 70.00, mango: 95.00, banana: 52.00, watermelon: 17.00, muskmelon: 26.00, tomato: 24.00, brinjal: 27.00 },
+                zaid: { watermelon: 16.00, muskmelon: 25.00, tomato: 26.00, brinjal: 29.00, cucumber: 23.00 }
+            },
+            "rajasthan": {
+                rabi: { wheat: 24.50, barley: 20.50, mustard: 65.00, chickpea: 53.00, jowar: 18.50, bajra: 17.00, cotton: 71.00, sugarcane: 30.50, jute: 67.00, apple: 115.00, orange: 62.00, grapes: 78.00, banana: 48.00, mango: 82.00, watermelon: 15.50, muskmelon: 23.00, potato: 26.00, onion: 32.00, tomato: 21.00, carrot: 42.00, spinach: 16.00, cauliflower: 26.00, cabbage: 21.00, brinjal: 23.00 },
+                kharif: { bajra: 22.00, jowar: 19.50, maize: 24.00, rice: 29.00, cotton: 76.00, sugarcane: 33.00, jute: 69.00, mango: 88.00, banana: 50.00, watermelon: 16.50, muskmelon: 24.00, tomato: 23.00, brinjal: 26.00 },
+                zaid: { cucumber: 21.00, tomato: 28.00, watermelon: 16.00, muskmelon: 25.00, brinjal: 29.00 }
+            },
+            "default": {
+                rabi: { wheat: 24.50, mustard: 65.00, barley: 20.50, chickpea: 54.00, maize: 23.00, rice: 28.00, jowar: 18.00, bajra: 17.50, cotton: 72.00, sugarcane: 31.00, jute: 68.00, apple: 118.00, orange: 63.00, grapes: 79.00, banana: 49.00, mango: 84.00, watermelon: 15.50, muskmelon: 22.00, potato: 26.00, onion: 33.00, tomato: 21.50, carrot: 41.00, spinach: 16.50, cauliflower: 27.00, cabbage: 22.00, brinjal: 24.00 },
+                kharif: { rice: 28.00, cotton: 72.00, maize: 23.00, bajra: 21.00, jowar: 19.00, sugarcane: 32.00, jute: 69.00, mango: 86.00, banana: 51.00, watermelon: 16.00, muskmelon: 23.00, tomato: 22.00, brinjal: 25.00 },
+                zaid: { watermelon: 15.50, cucumber: 20.50, muskmelon: 23.00, tomato: 24.00, brinjal: 27.00 }
+            }
+        };
+        
+        const languageSelect = document.getElementById('language-select');
+        const regionSelect = document.getElementById('region-select');
+        const produceSelect = document.getElementById('produce-select');
+        const newsContainer = document.getElementById('news-container');
+        const pricesContainer = document.getElementById('prices-container');
+        const biddingForm = document.getElementById('bidding-form');
+        const bidMessage = document.getElementById('bid-message');
+        
+        // New elements for the tabs
+        const newsContainerTab = document.getElementById('news-container-tab');
+        const pricesContainerTab = document.getElementById('prices-container-tab');
+        const biddingFormTab = document.getElementById('bidding-form-tab');
+        const bidMessageTab = document.getElementById('bid-message-tab');
+        const sellForm = document.getElementById('sell-form');
+        const sellMessage = document.getElementById('sell-message');
+        const helpContainer = document.getElementById('help-container');
+        const cropSearchPrices = document.getElementById('crop-search-prices');
+
+        // New elements for Registration
+        const registrationForm = document.getElementById('registration-form');
+        const registrationMessage = document.getElementById('registration-message');
+
+        function getSeason() {
+            const month = new Date().getMonth();
+            if (month >= 2 && month <= 5) return 'zaid'; // March to June
+            if (month >= 6 && month <= 9) return 'kharif'; // July to October
+            return 'rabi'; // November to February
+        }
+
+        function populateDropdowns() {
+            languages.forEach(lang => {
+                const option = document.createElement('option');
+                option.value = lang.code;
+                option.textContent = lang.name;
+                languageSelect.appendChild(option);
+            });
+
+            statesAndUTs.forEach(region => {
+                const option = document.createElement('option');
+                option.value = region.toLowerCase().replace(/\s/g, '');
+                option.textContent = region;
+                regionSelect.appendChild(option);
+            });
+            regionSelect.value = "rajasthan"; // Set default to user's location
+
+            produceItems.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.toLowerCase().replace(/\s/g, '');
+                option.textContent = item;
+                produceSelect.appendChild(option);
+            });
+        }
+
+        function updateContent() {
+            const lang = languageSelect.value;
+            const langData = content[lang] || content['en'];
+            const region = regionSelect.value;
+            const season = getSeason();
+
+            // Update main content headings
+            document.getElementById('news-heading').textContent = langData.newsHeading;
+            document.getElementById('prices-heading').textContent = langData.pricesHeading;
+            document.getElementById('bid-heading').textContent = langData.bidHeading;
+            document.getElementById('bid-item-label').textContent = langData.bidItemLabel;
+            document.getElementById('bid-amount-label').textContent = langData.bidAmountLabel;
+            document.getElementById('submit-bid-button').textContent = langData.submitBidButton;
+            
+            // Update tab button labels
+            document.getElementById('tab-registration').textContent = langData.registrationTab;
+
+            // Update tab content headings
+            document.getElementById('news-heading-tab').textContent = langData.newsHeading;
+            document.getElementById('prices-heading-tab').textContent = langData.pricesHeading;
+            document.getElementById('bid-heading-tab').textContent = langData.bidHeading;
+            document.getElementById('bid-item-label-tab').textContent = langData.bidItemLabel;
+            document.getElementById('bid-amount-label-tab').textContent = langData.bidAmountLabel;
+            document.getElementById('submit-bid-button-tab').textContent = langData.submitBidButton;
+            document.getElementById('help-heading').textContent = langData.helpHeading;
+            document.getElementById('registration-heading').textContent = langData.registrationHeading;
+            
+            // Update registration form labels
+            document.getElementById('reg-phone-label').textContent = langData.regPhoneLabel;
+            document.getElementById('reg-aadhar-label').textContent = langData.regAadharLabel;
+            document.getElementById('submit-registration-button').textContent = langData.submitRegistrationButton;
+
+
+            // Update sub-tab headings and labels
+            document.getElementById('sub-tab-buyers').textContent = langData.buyers;
+            document.getElementById('sub-tab-sellers').textContent = langData.sellers;
+            document.getElementById('sell-heading').textContent = langData.sellHeading;
+            document.getElementById('sell-item-label').textContent = langData.sellItemLabel;
+            document.getElementById('sell-quantity-label').textContent = langData.sellQuantityLabel;
+            document.getElementById('sell-price-label').textContent = langData.sellPriceLabel;
+            document.getElementById('submit-sell-button').textContent = langData.submitSellButton;
+
+            // Update News Sections
+            newsContainer.innerHTML = '';
+            newsContainerTab.innerHTML = '';
+            langData.news.forEach(article => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'card p-4 rounded-lg bg-gray-50';
+                newsCard.innerHTML = `
+                    <h3 class="font-medium text-lg text-gray-900">${article.title}</h3>
+                    <p class="text-sm text-gray-500 mt-1">${article.source}</p>
+                `;
+                newsContainer.appendChild(newsCard);
+                newsContainerTab.appendChild(newsCard.cloneNode(true));
+            });
+
+            // Update Prices Sections based on region and season
+            const currentSeasonPrices = priceData[region] ? priceData[region][season] : priceData.default[season];
+            
+            document.getElementById('current-season').textContent = `(${langData.season[season]})`;
+            document.getElementById('current-season-tab').textContent = `(${langData.season[season]})`;
+            
+            // Render prices initially
+            renderPrices(currentSeasonPrices, pricesContainer);
+            renderPrices(currentSeasonPrices, pricesContainerTab);
+            
+            // Update Help Section
+            helpContainer.innerHTML = '';
+            if (langData.help) {
+                langData.help.forEach(faq => {
+                    const faqCard = document.createElement('div');
+                    faqCard.className = 'card p-4 rounded-lg bg-gray-50';
+                    faqCard.innerHTML = `
+                        <h3 class="font-semibold text-gray-900">${faq.question}</h3>
+                        <p class="text-sm text-gray-600 mt-2">${faq.answer}</p>
+                    `;
+                    helpContainer.appendChild(faqCard);
+                });
+            } else {
+                helpContainer.innerHTML = `<p class="text-gray-500">No help content available for this language.</p>`;
+            }
+        }
+
+        function renderPrices(prices, container) {
+            container.innerHTML = '';
+            for (const item in prices) {
+                const priceItem = document.createElement('div');
+                priceItem.className = 'price-item flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0';
+                priceItem.dataset.crop = item.toLowerCase();
+                priceItem.innerHTML = `
+                    <span class="text-gray-700 capitalize">${item}</span>
+                    <span class="font-semibold text-lg text-green-700">₹${prices[item].toFixed(2)}</span>
+                `;
+                container.appendChild(priceItem);
+            }
+        }
+
+        // Handle bidding form submission (for both forms)
+        const handleBidSubmit = (e, messageContainer, form) => {
+            e.preventDefault();
+            const bidAmount = form.querySelector('input').value;
+            const lang = languageSelect.value;
+            const langData = content[lang] || content['en'];
+            
+            if (bidAmount > 0) {
+                messageContainer.textContent = langData.messages.success;
+                messageContainer.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-green-100 text-green-700 block';
+                form.reset();
+            } else {
+                messageContainer.textContent = langData.messages.error;
+                messageContainer.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-red-100 text-red-700 block';
+            }
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageContainer.classList.add('hidden');
+            }, 5000);
+        };
+
+        // Handle sellers form submission
+        const handleSellSubmit = (e) => {
+            e.preventDefault();
+            const quantity = document.getElementById('sell-quantity').value;
+            const price = document.getElementById('sell-price').value;
+            const lang = languageSelect.value;
+            const langData = content[lang] || content['en'];
+
+            if (quantity > 0 && price > 0) {
+                sellMessage.textContent = langData.messages.success;
+                sellMessage.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-green-100 text-green-700 block';
+                sellForm.reset();
+            } else {
+                sellMessage.textContent = langData.messages.error;
+                sellMessage.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-red-100 text-red-700 block';
+            }
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                sellMessage.classList.add('hidden');
+            }, 5000);
+        };
+        
+        // Handle registration form submission
+        const handleRegistrationSubmit = (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('reg-phone').value;
+            const aadhar = document.getElementById('reg-aadhar').value;
+            const lang = languageSelect.value;
+            const langData = content[lang] || content['en'];
+
+            if (phone && aadhar) {
+                registrationMessage.textContent = langData.messages.regSuccess;
+                registrationMessage.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-green-100 text-green-700 block';
+                registrationForm.reset();
+            } else {
+                registrationMessage.textContent = langData.messages.regError;
+                registrationMessage.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-red-100 text-red-700 block';
+            }
+             // Hide message after 5 seconds
+            setTimeout(() => {
+                registrationMessage.classList.add('hidden');
+            }, 5000);
+        };
+        
+        // Search functionality
+        cropSearchPrices.addEventListener('input', () => {
+            const searchTerm = cropSearchPrices.value.toLowerCase();
+            const priceItems = pricesContainerTab.querySelectorAll('.price-item');
+            priceItems.forEach(item => {
+                const cropName = item.dataset.crop;
+                if (cropName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Attach event listeners to both bidding forms and the sell form
+        biddingForm.addEventListener('submit', (e) => handleBidSubmit(e, bidMessage, biddingForm));
+        biddingFormTab.addEventListener('submit', (e) => handleBidSubmit(e, bidMessageTab, biddingFormTab));
+        sellForm.addEventListener('submit', handleSellSubmit);
+        registrationForm.addEventListener('submit', handleRegistrationSubmit);
+
+
+        // Main tab switching logic
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active-tab', 'bg-green-600', 'text-white');
+                    btn.classList.add('bg-white', 'text-gray-800');
+                });
+                tabContents.forEach(content => content.classList.add('hidden'));
+
+                const tabId = button.id.replace('tab-', '');
+                document.getElementById(`content-${tabId}`).classList.remove('hidden');
+                button.classList.add('active-tab', 'bg-green-600', 'text-white');
+                button.classList.remove('bg-white', 'text-gray-800');
+            });
+        });
+
+        // Sub-tab switching logic for the bidding tab
+        const subTabButtons = document.querySelectorAll('.sub-tab-button');
+        const subTabContents = document.querySelectorAll('.sub-tab-content');
+
+        subTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                subTabButtons.forEach(btn => {
+                    btn.classList.remove('active-sub-tab');
+                });
+                subTabContents.forEach(content => content.classList.add('hidden'));
+
+                const subTabId = button.id.replace('sub-tab-', '');
+                document.getElementById(`sub-content-${subTabId}`).classList.remove('hidden');
+                button.classList.add('active-sub-tab');
+            });
+        });
+
+
+        // Event listeners for dropdowns
+        languageSelect.addEventListener('change', updateContent);
+        regionSelect.addEventListener('change', updateContent);
+        produceSelect.addEventListener('change', updateContent);
+
+        // Initial content load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateDropdowns();
+            updateContent();
+            
+            // Set initial styles for the active sub-tab
+            document.getElementById('sub-tab-buyers').classList.add('text-green-600', 'border-b-2', 'border-green-600');
+            document.getElementById('sub-tab-sellers').classList.add('text-gray-700', 'hover:text-green-600');
+        });
+
+    </script>
+</body>
+</html>
